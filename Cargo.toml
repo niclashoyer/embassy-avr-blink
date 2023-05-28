@@ -1,0 +1,49 @@
+[package]
+name = "embassy-avr-blink"
+version = "0.1.0"
+authors = ["Niclas Hoyer <info@niclashoyer.de>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "embassy-avr-blink"
+test = false
+bench = false
+
+[dependencies]
+panic-halt = "0.2.0"
+ufmt = "0.1.0"
+nb = "0.1.2"
+embedded-hal = "0.2.3"
+simavr-section = "0.1.1"
+embassy-executor = { git = "https://github.com/niclashoyer/embassy.git", branch = "avr", features = [
+    "nightly",
+    "arch-avr",
+    "executor-thread",
+] }
+embassy-futures = { git = "https://github.com/niclashoyer/embassy.git", branch = "avr" }
+embassy-time = { git = "https://github.com/niclashoyer/embassy.git", branch = "avr", features = [
+    "generic-queue-8",
+    "tick-hz-10_000",
+] }
+atomic-polyfill = "1.0"
+critical-section = "1.0"
+avr-device = "0.5"
+
+[dependencies.arduino-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "e29a7be5b1fa9d490ded11e539d345af041ccef6"
+features = ["arduino-uno", "critical-section-impl"]
+
+# Configure the build for minimal size - AVRs have very little program memory
+[profile.dev]
+panic = "abort"
+lto = true
+opt-level = "s"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = true
+lto = true
+opt-level = "s"

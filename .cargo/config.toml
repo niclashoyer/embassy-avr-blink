@@ -1,0 +1,12 @@
+[build]
+target = "avr-specs/avr-atmega328p.json"
+
+[target.'cfg(target_arch = "avr")']
+runner = "simavr -v -v -v"
+rustflags = [
+    "-C",
+    "link-arg=-Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000",
+]
+
+[unstable]
+build-std = ["core"]
